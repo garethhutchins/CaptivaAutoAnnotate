@@ -39,12 +39,27 @@ namespace Custom.InputAccel.UimScript
         {
             //Get the XML String
             string pageXML = p.NodeData.ValueSet.ReadString("PageXML");
-            //Convert it to an XML Document
-            XmlDocument XMLDoc = new XmlDocument();
-            XMLDoc.LoadXml(pageXML);
-            XmlNodeList Fields = XMLDoc.GetElementsByTagName("Index");
-            string X1 = Fields[0].Attributes.GetNamedItem("X1").Value;
-            MessageBox.Show(X1);
+            if (pageXML != "")
+            {
+                //Convert it to an XML Document
+                XmlDocument XMLDoc = new XmlDocument();
+                XMLDoc.LoadXml(pageXML);
+                XmlNodeList Fields = XMLDoc.GetElementsByTagName("Index");
+                if (Fields.Count ==1)
+                {
+                    //We're only going to do the 1 field right now
+                    string X1 = Fields[0].Attributes.GetNamedItem("X1").Value;
+                    string X2 = Fields[0].Attributes.GetNamedItem("X2").Value;
+                    string Y1 = Fields[0].Attributes.GetNamedItem("Y1").Value;
+                    string Y2 = Fields[0].Attributes.GetNamedItem("Y2").Value;
+                    //Save the Values back
+                    string Coordinates = X1 + "|" + X2 + "|" + Y1 + "|" + Y2;
+                    p.NodeData.ValueSet.WriteString("Coordinates", Coordinates);
+                }
+                
+            }
+            
+
         }
 
         public override void StartModule(ICodeModuleStartInfo startInfo)
